@@ -1,0 +1,4 @@
+[submodule "webxr"]
+	path = implementation/webxr
+	url = https://github.com/MikelSalazar/CoEditAR_WebXR.git
+	branch = development
