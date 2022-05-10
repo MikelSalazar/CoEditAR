@@ -1,0 +1,22 @@
+{
+	"$id": "https://coeditar.org/schema/coeditar.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "CoEditAR JSON Schema",
+	"description": "The JSON schema of the CoEditAR framework files.",
+	"allOf": [ { "$ref": "#/definitions/root" } ],
+	"definitions": {
+		"root": {
+			"title": "Root",
+			"description": "The root of the Threesenter system.",
+			"properties": {
+				"coeditar": {
+					"$id": "coeditar",
+					"title": "Threesenter",
+					"description": "The version number of Threesenter system.",
+					"type": "number",
+					"minimum": 0
+				}
+			}
+		}
+	}
+}
