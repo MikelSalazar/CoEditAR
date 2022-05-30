@@ -2,13 +2,13 @@
 	"$id": "https://threesenter.com/schema/files/root.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "Root",
-	"description": "The root of the Threesenter system.",
+	"description": "The root of the CoEditAR document.",
 	"properties": {
 		"coeditar": { 
-			"$id": "coeditar",
-			"title": "Threesenter",
-			"description": "The version number of Threesenter system.",
-			"type":"number",
+			"title": "CoEditAR",
+			"description": "The version number of CoEditAR system.",
+			"type": "number",
+			"default": 0.1,
 			"minimum": 0
 		}
 	}

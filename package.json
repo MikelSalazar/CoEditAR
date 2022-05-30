@@ -1,0 +1,8 @@
+{
+	"name": "CoEditAR",
+	"version": "0.1.0",
+	"description": "CoEditAR is a framework that facilitates the creation of collaborative 3D editors, optimized for Augmented/Mixed Reality devices.",
+	"scripts": {
+		"generate": "node documentation/schema/generate.js"
+	}
+}

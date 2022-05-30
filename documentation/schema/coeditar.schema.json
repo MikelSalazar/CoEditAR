@@ -7,13 +7,13 @@
 	"definitions": {
 		"root": {
 			"title": "Root",
-			"description": "The root of the Threesenter system.",
+			"description": "The root of the CoEditAR document.",
 			"properties": {
 				"coeditar": {
-					"$id": "coeditar",
-					"title": "Threesenter",
-					"description": "The version number of Threesenter system.",
+					"title": "CoEditAR",
+					"description": "The version number of CoEditAR system.",
 					"type": "number",
+					"default": 0.1,
 					"minimum": 0
 				}
 			}
