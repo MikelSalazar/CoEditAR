@@ -10,6 +10,11 @@
 			"type": "number",
 			"default": 0.1,
 			"minimum": 0
+		},
+		"views": {
+			"title": "Views",
+			"type":"array",
+			"allOf": [{"$ref": "view.schema.json"}]
 		}
 	}
 }
