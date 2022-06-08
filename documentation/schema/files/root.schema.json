@@ -3,7 +3,7 @@
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "Root",
 	"description": "The root of the CoEditAR document.",
-	"$comment": "",
+	"$comment": "root",
 	"properties": {
 		"coeditar": { 
 			"title": "CoEditAR",
@@ -24,11 +24,11 @@
 			"type": "array",
 			"allOf": [{ "$ref": "user/interaction/space.schema.json" }]
 		},
-		"views": {
-			"title": "Views",
-			"description": "The view in the CoEditAR system.",
+		"users": {
+			"title": "Users",
+			"description": "The users of the CoEditAR system.",
 			"type": "array",
-			"allOf": [{ "$ref": "user/interaction/view.schema.json" }]
+			"allOf": [{ "$ref": "user/user.schema.json" }]
 		}
 	},
 	"required": ["coeditar"],

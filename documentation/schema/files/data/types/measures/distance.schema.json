@@ -1,9 +1,9 @@
 {
-	"$id": "https://coeditar.org/schema/files/shape.schema.json",
+	"$id": "https://coeditar.org/schema/files/data/types/measures/distance.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "Distance",
 	"description": "Defines a length measure.",
-	"$comment": "",
+	"$comment": "data/types/measures/distance",
 	"$ref": "../measure.schema.json",
 	"properties": {
 		"value": { 

@@ -1,0 +1,26 @@
+{
+	"$id": "https://coeditar.org/schema/files/user/user.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "View",
+	"description": "Describes a view in the CoEditAR system.",
+	"$comment": "user/User",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The name of the view.",
+			"type": "string"
+		},
+		"presences": {
+			"title": "Presences",
+			"description": "The presences of the user in the interaction spaces.",
+			"type": "array",
+			"allOf": [{ "$ref": "interaction/presence.schema.json" }]
+		},
+		"views": {
+			"title": "Views",
+			"description": "The view of the user in the interaction spaces.",
+			"type": "array",
+			"allOf": [{ "$ref": "interaction/view.schema.json" }]
+		}
+	}
+}

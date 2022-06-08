@@ -1,0 +1,22 @@
+{
+	"$id": "https://coeditar.org/schema/files/user/interaction/presence.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Presence",
+	"description": "Defines a user presence in an User Interaction space.",
+	"$comment": "user/interaction/Presence",
+	"properties": {
+		"name": {
+			"title": "Name",
+			"description": "The unique name of the presence."
+		},
+		"entity": {
+			"title": "Entity",
+			"description": "The main entity of the presence."
+		},
+		"space": {
+			"title": "Space",
+			"description": "The space associated with the presence.",
+			"type": "string"
+		}
+	}
+}

@@ -1,9 +1,9 @@
 {
-	"$id": "https://coeditar.org/schema/files/view.schema.json",
+	"$id": "https://coeditar.org/schema/files/user/interaction/view.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "View",
 	"description": "Describes a view in the CoEditAR system.",
-	"$comment": "",
+	"$comment": "user/interaction/View",
 	"properties": {
 		"name": { 
 			"title": "Name",
@@ -25,6 +25,12 @@
 			"description": "The visibility state of the view.",
 			"type": "string",
 			"enum": ["Normal", "Maximized", "FullScreen"]
+		},
+		"layers": {
+			"title": "Layes",
+			"description": "The layers of the view.",
+			"type": "array",
+			"allOf": [{ "$ref": "../../logic/entity.schema.json" }]
 		}
 	}
 }

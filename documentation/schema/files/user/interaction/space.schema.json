@@ -1,9 +1,9 @@
 {
-	"$id": "https://coeditar.org/schema/files/space.schema.json",
+	"$id": "https://coeditar.org/schema/files/user/interaction/space.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "Space",
 	"description": "Describes an user interaction space.",
-	"$comment": "",
+	"$comment": "user/interaction/Space",
 	"properties": {
 		"name": {
 			"title": "Name",
