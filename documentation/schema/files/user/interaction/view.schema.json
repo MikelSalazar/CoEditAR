@@ -1,0 +1,30 @@
+{
+	"$id": "https://coeditar.org/schema/files/view.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "View",
+	"description": "Describes a view in the CoEditAR system.",
+	"$comment": "",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The name of the view.",
+			"type": "string"
+		},
+		"width": {
+			"title": "Width",
+			"description": "The width of the view (CSS value).",
+			"type": "number"
+		},
+		"height": {
+			"title": "Height",
+			"description": "The height of the view (CSS value).",
+			"type": "number"
+		},
+		"state": {
+			"title": "State",
+			"description": "The visibility state of the view.",
+			"type": "string",
+			"enum": ["Normal", "Maximized", "FullScreen"]
+		}
+	}
+}

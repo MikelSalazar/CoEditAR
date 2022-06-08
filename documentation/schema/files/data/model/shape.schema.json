@@ -1,0 +1,49 @@
+{
+	"$id": "https://coeditar.org/schema/files/data/model/shape.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Shape",
+	"description": "Defines a shape of a smart assembly.",
+	"$comment": "data/model/Shape",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The (unique) name of the shape.",
+			"type": "string"
+		},
+		"extends": {
+			"title": "Extends",
+			"description": "The id of the class this instance inherits from.",
+			"type": "string"
+		},
+		"type": {
+			"title": "Type",
+			"description": "The type of the shape ('box', 'ellipsoid', 'cylinder' or 'cone').",
+			"type": "string"
+		},
+		"width": {
+			"title": "Width",
+			"description": "The width of the shape.",
+			"$ref": "../types/measures/distance.schema.json"
+		},
+		"height": {
+			"title": "Height",
+			"description": "The height of the shape.",
+			"$ref": "../types/measures/distance.schema.json"
+		},
+		"depth": {
+			"title": "Depth",
+			"description": "The depth of the shape.",
+			"$ref": "../types/measures/distance.schema.json"
+		},
+		"radius": {
+			"title": "Radius",
+			"description": "The radius of the shape.",
+			"$ref": "../types/measures/distance.schema.json"
+		},
+		"radius2": {
+			"title": "Radius2",
+			"description": "The secondary radius of the shape (for cones).",
+			"$ref": "../types/measures/distance.schema.json"
+		}
+	}
+}

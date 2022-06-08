@@ -1,8 +1,9 @@
 {
-	"$id": "https://threesenter.com/schema/files/root.schema.json",
+	"$id": "https://coeditar.com/schema/files/root.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "Root",
 	"description": "The root of the CoEditAR document.",
+	"$comment": "",
 	"properties": {
 		"coeditar": { 
 			"title": "CoEditAR",
@@ -11,10 +12,25 @@
 			"default": 0.1,
 			"minimum": 0
 		},
+		"packages": {
+			"title": "Packages",
+			"description": "The packages of the CoEditAR system.",
+			"type": "array",
+			"allOf": [{ "$ref": "data/model/package.schema.json" }]
+		},
+		"spaces": {
+			"title": "Spaces",
+			"description": "The interaction spaces in the CoEditAR system.",
+			"type": "array",
+			"allOf": [{ "$ref": "user/interaction/space.schema.json" }]
+		},
 		"views": {
 			"title": "Views",
-			"type":"array",
-			"allOf": [{"$ref": "view.schema.json"}]
+			"description": "The view in the CoEditAR system.",
+			"type": "array",
+			"allOf": [{ "$ref": "user/interaction/view.schema.json" }]
 		}
-	}
+	},
+	"required": ["coeditar"],
+	"additionalItems": false
 }

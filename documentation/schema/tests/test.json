@@ -1,4 +1,5 @@
 {
-	"$schema": "../coeditar.schema.json"
-	
+	"$schema": "../coeditar.schema.json",
+	"coeditar": 0.1,
+	"spaces": []
 }
