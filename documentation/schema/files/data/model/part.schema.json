@@ -1,0 +1,25 @@
+{
+	"$id": "https://coeditar.org/schema/files/data/model/part.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Part",
+	"description": "Defines a part of a smart assembly.",
+	"$comment": "data/model/Part",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The (unique) name of the part.",
+			"type": "string"
+		},
+		"extends": {
+			"title": "Extends",
+			"description": "The id of the class this instance inherits from.",
+			"type": "string"
+		},
+		"shapes": {
+			"title": "Shapes",
+			"description": "The shape of the part.",
+			"type": "array",
+			"allOf": [{ "$ref": "shape.schema.json" }]
+		}
+	}
+}

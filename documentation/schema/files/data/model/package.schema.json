@@ -1,0 +1,37 @@
+{
+	"$id": "https://coeditar.org/schema/files/data/model/package.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Package",
+	"description": "Describes a package (a collection of resources).",
+	"$comment": "data/model/Package",
+	"properties": {
+		"name": {
+			"title": "Name",
+			"description": "The (unique) name of the package.",
+			"type": "string"
+		},
+		"extends": {
+			"title": "Extends",
+			"description": "The id of the class this instance inherits from.",
+			"type": "string"
+		},
+		"assemblies": {
+			"title": "Assemblies",
+			"description": "The behaviors contained in the package.",
+			"type": "array",
+			"allOf": [{ "$ref": "assembly.schema.json" }]
+		},
+		"behaviors": {
+			"title": "Behaviors",
+			"description": "The behaviors contained in the package.",
+			"type": "array",
+			"allOf": [{ "$ref": "../../logic/behavior.schema.json" }]
+		},
+		"entities": {
+			"title": "Entities",
+			"description": "The entities contained in the package.",
+			"type": "array",
+			"allOf": [{ "$ref": "../../logic/entity.schema.json" }]
+		}
+	}
+}
