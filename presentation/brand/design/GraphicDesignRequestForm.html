@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<title>Graphic Design Request Form</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+<style>
+* {margin: 0; box-sizing: content-box;}
+html { font-family: Verdana, Geneva, Tahoma, sans-serif;}
+body { background: grey; }
+form { width: 19cm; height: 27.7cm; margin: 1cm auto 0 auto; padding: 1cm;
+	background:white; border: 1px solid black;
+}
+header { position: fixed; top: 0; left: 0; width: 100%; padding: 2px;
+	background: white; border-bottom: 1px solid black; 
+	box-shadow: 2px 2px black;
+}
+
+
+section { display: inline-block; width:100%; margin-bottom: 0.6cm;}
+div { display: inline-block; width: 49%; }
+.line { display: inline-flex; width: 100%; justify-content: space-between; 
+	margin-bottom: 0.2cm; }
+label { white-space: nowrap; margin-right: 0.2cm;}
+input [type=text] { width: 100%; float:right; clear: both; white-space: nowrap;}
+/* input:invalid { border: 2px solid red; } */
+.leftBlock { width: 49%; } 
+.rightBlock { width: 49%; float: right;}
+
+#allocation_info input { width: 65%; }
+#client_info input { width: 65%; }
+#contact_info input { width: 78%; }
+#project_info input[type=text] { width: 65%; }
+#dates_info input { width: 40%; }
+
+#project_type { width: 66%; margin: 0 }
+#project_type > input[type=text] { width: 10% }
+#project_revision { width: 25%!important; float:right; clear: both; margin: 0}
+
+#submission_date { width: 49%; } #submission_date input { width: 40%; }
+#delivery_date { width: 49%; float:right} #delivery_date input { width: 40%; }
+p {font-size: 90%; font-style: italic; text-align: center;}
+@media print {
+	body { background: white; }
+	header { display: none; }
+	form { margin-top: 0; border: none; }
+}
+		</style>
+	</head>
+	<body>
+		<header>
+			<button onclick="ClearData();">Clear data</button>
+			<button onclick="LoadData();">Load data</button>
+			<button onclick="SaveData();">Save data</button>
+			<button onclick="GeneratePDF();">Generate PDF File</button>
+		</header>
+
+		<form>
+			<section>
+				<div id="title" class="leftBlock">
+					<h1>Graphic Design<br> Request Form</h1>
+				</div>
+				<div id="allocation_info" class="rightBlock">
+					<div class="line">
+						<label for="designers">Designers:</label>
+						<input name="designers" id="designers" type="text"></input>
+					</div>
+					<div class="line">
+						<label for="hours">Total Hours:</label>
+						<input name="hours" id="hours" type="text"></input>
+					</div>
+				</div>
+			</section>
+			
+			<section>
+				<div id="client_info" class="leftBlock">
+					<div class="line">
+						<label for="name">Client Name:</label>
+						<input name="name" id="name" type="text" required></input>
+					</div>
+					<div class="line">
+						<label for="department">Department:</label>
+						<input name="department" id="department" type="text"></input>
+					</div>
+				</div>
+				<div id="contact_info" class="rightBlock">
+						<div class="line">
+							<label for="phone">Phone:</label>
+							<input name="phone" id="phone" type="phone"></input>
+						</div>
+						<div class="line">
+							<label for="email">Email:</label> 
+							<input name="email" id="email" type="email"></input>
+					</div>
+				</div>
+				<div id="project_info" class="leftBlock">
+					<div class="line">
+						<label for="project_title">Project Title:</label>
+						<input name="project_title" id="project_title" type="text" required></input>
+					</div>
+					<div class="line">
+						<label>Project Type: </label>
+						<div id="project_type">
+							<input name="project_type" id="project_type_new" type="radio" value="new" checked></input>
+							<label for="project_type_new">New </label>
+							<input name="project_type" id="project_type_revision" type="radio" value="revision"></input>
+							<label for="project_type_revision">Revision</label>
+							<input name="project_revision" id="project_revision"></input>
+						</div>
+					</div>
+				</div>
+				<div id="dates_info" class="rightBlock">
+					<div class="line">
+						<label for="submission_date">Form Submission Date:</label>
+						<input name="submission_date" type="date" required></input>
+					</div>
+					<div class="line">
+						<label for="delivery_date">Desired Delivery Date:</label>
+						<input name="delivery_date" type="date" required></input>
+					</div>
+				</div>
+				<p>
+					Dates must be agreed upon with Designer. 
+					Please allow at least 10 working days for new projects.
+				</p>
+			</section>
+			<hr>
+		</form>
+		<form>
+		</form>
+	<script>
+
+// Save a list of the fields that we want to serialize and deserialize
+let nodes = [... document.getElementsByTagName('form')], fields = [];
+while(nodes.length > 0) {
+	let node = nodes.shift();
+	if (node.children) nodes.push(... node.children);
+	let tag = node.localName, attribs = node.attributes,
+		name = attribs.name, type = attribs.type;
+	if (tag != "input" || !name || type == "button") continue;
+	fields.push({name: name.value, node: node});
+}
+
+// Show a message on console
+console.log("Fields detected: " + fields.length); console.log(fields);
+
+
+/** Clears the form data. */ 
+function ClearData() {
+	if (window.confirm("Are you sure you want to clear the form?\n" +
+		"(This action can not be undone)")) {
+		let forms = document.getElementsByTagName('form');
+		for (let form of forms) form.reset();
+	}
+}
+
+
+/** Saves the form data. */ 
+function SaveData() {
+
+	// Create an object to store the data
+	let data = {};
+
+	// Read the fields
+	for (let field of fields) {
+		data[field.name] = field.node.value;
+	}
+	
+	// Show the data on console
+	console.log(data);
+
+	// Create a temporal link to download the data as a JSON file
+	var downloadLink = window.document.createElement('a');
+	downloadLink.href = 'data:text/plain;charset=utf-8,' + 
+		encodeURIComponent(JSON.stringify(data, null, "\t"));
+	downloadLink.download = 'GraphicDesignRequestForm.json';
+	document.body.appendChild(downloadLink);
+	downloadLink.click();
+	document.body.removeChild(downloadLink);
+}
+
+function GeneratePDF() {
+	window.print();
+}
+	</script>
+	</body>
+</html>
