@@ -2,14 +2,20 @@
 	"$id": "https://coeditar.com/schema/files/model/model.schema.json",
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"title": "Model",
-	"description": "Defines a semantic model within the CoEditAR framework.",
+	"description": "Defines a semantic model.",
 	"$comment": "model",
 	"properties": {
-		"classes": { 
+		"name": { 
+			"title": "Name",
+			"description": "The name of the model.",
+			"type": "string"
+		},
+		"classes": {
+			
 			"title": "Classes",
 			"description": "The classes of the semantic model.",
 			"type": "array",
-			"items": true
+			"items": { "$ref": "class.schema.json" }
 		}
 	}
 }

@@ -1,0 +1,20 @@
+{
+	"$id": "https://coeditar.com/schema/files/model/property.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Property",
+	"description": "Defines a property of a semantic class.",
+	"$comment": "property",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The name of the property.",
+			"type": "string"
+		},
+		"type": { 
+			"title": "type",
+			"description": "The type of the property.",
+			"type": "string",
+			"enum": [ "boolean", "number", "string" ]
+		}
+	}
+}

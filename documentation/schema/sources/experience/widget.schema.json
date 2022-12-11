@@ -1,0 +1,20 @@
+{
+	"$id": "https://coeditar.com/schema/files/experience/widget.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Widget",
+	"description": "Defines an interaction widget.",
+	"$comment": "widget",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The name of the widget.",
+			"type": "string"
+		},
+		"widgets": {
+			"title": "Sub-widget",
+			"description": "The child widget of the widget.",
+			"type": "array",
+			"items": { "$ref": "widget.schema.json" }
+		}
+	}
+}
