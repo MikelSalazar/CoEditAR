@@ -1,0 +1,41 @@
+{
+	"$id": "https://coeditar.com/schema/files/root.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Root",
+	"description": "The root of the CoEditAR document.",
+	"$comment": "root",
+	"properties": {
+		"CoEditAR": { 
+			"title": "CoEditAR",
+			"description": "The version number of the CoEditAR document.",
+			"type": "number",
+			"default": 0.1,
+			"minimum": 0
+		},
+		"models": {
+			"title": "Models",
+			"description": "The semantic models of the CoEditAR document.",
+			"type": "array",
+			"items": { "$ref": "model/model.schema.json" }
+		},
+		"spaces": {
+			"title": "Spaces",
+			"description": "The interaction spaces.",
+			"type": "array",
+			"items": { "$ref": "space/space.schema.json" }
+		},
+		"experiences": {
+			"title": "Experiences",
+			"description": "The user experiences.",
+			"type": "array",
+			"items": { "$ref": "experience/experience.schema.json" }
+		},
+		"users": {
+			"title": "Users",
+			"description": "The users of an interaction space.",
+			"type": "array",
+			"items": { "$ref": "user/user.schema.json" }
+		}
+	},
+	"required": ["CoEditAR"]
+}

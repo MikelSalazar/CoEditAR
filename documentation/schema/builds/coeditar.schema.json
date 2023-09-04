@@ -1,0 +1,192 @@
+{
+	"$id": "https://coeditar.org/schema/coeditar.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "CoEditAR JSON Schema",
+	"description": "The JSON schema of the CoEditAR documents.",
+	"allOf": [ { "$ref": "#/definitions/root" } ],
+	"definitions": {
+		"root": {
+			"title": "Root",
+			"description": "The root of the CoEditAR document.",
+			"$comment": "root",
+			"properties": {
+				"CoEditAR": {
+					"title": "CoEditAR",
+					"description": "The version number of the CoEditAR document.",
+					"type": "number",
+					"default": 0.1,
+					"minimum": 0
+				},
+				"models": {
+					"title": "Models",
+					"description": "The semantic models of the CoEditAR document.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/model" }
+				},
+				"spaces": {
+					"title": "Spaces",
+					"description": "The spaces of the CoEditAR document.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/space" }
+				},
+				"experiences": {
+					"title": "Experiences",
+					"description": "The experiences of the CoEditAR document.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/experience" }
+				},
+				"users": {
+					"title": "Users",
+					"description": "The users of the CoEditAR document.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/user" }
+				}
+			},
+			"required": [ "CoEditAR" ]
+		},
+		"model": {
+			"title": "Model",
+			"description": "Defines a semantic model.",
+			"$comment": "model",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the model.",
+					"type": "string"
+				},
+				"classes": {
+					"title": "Classes",
+					"description": "The classes of the semantic model.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/class" }
+				}
+			}
+		},
+		"class": {
+			"title": "Class",
+			"description": "Defines a class of a semantic model.",
+			"$comment": "class",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the class.",
+					"type": "string"
+				},
+				"properties": {
+					"title": "properties",
+					"description": "The properties of the class.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/property" }
+				}
+			}
+		},
+		"property": {
+			"title": "Property",
+			"description": "Defines a property of a semantic class.",
+			"$comment": "property",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the property.",
+					"type": "string"
+				},
+				"type": {
+					"title": "type",
+					"description": "The type of the property.",
+					"type": "string",
+					"enum": [ "boolean", "number", "string" ]
+				}
+			}
+		},
+		"space": {
+			"title": "Space",
+			"description": "Defines an interaction space.",
+			"$comment": "space",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the space.",
+					"type": "string"
+				},
+				"spaces": {
+					"title": "Sub-spaces",
+					"description": "The sub-spaces of the space.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/space" }
+				},
+				"entities": {
+					"title": "Entities",
+					"description": "The sub-spaces of the space.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/entity" }
+				}
+			}
+		},
+		"entity": {
+			"title": "Entity",
+			"description": "Defines an interaction space.",
+			"$comment": "entity",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the entity.",
+					"type": "string"
+				},
+				"entities": {
+					"title": "Sub-entities",
+					"description": "The child entities of the entity.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/entity" }
+				}
+			}
+		},
+		"experience": {
+			"title": "Experience",
+			"description": "Defines a user experience.",
+			"$comment": "experience",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the experience.",
+					"type": "string"
+				},
+				"widgets": {
+					"title": "Widgets",
+					"description": "The widgets of the experience.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/widget" }
+				}
+			}
+		},
+		"widget": {
+			"title": "Widget",
+			"description": "Defines an interaction widget.",
+			"$comment": "widget",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the widget.",
+					"type": "string"
+				},
+				"widgets": {
+					"title": "Sub-widget",
+					"description": "The child widget of the widget.",
+					"type": "array",
+					"items": { "$ref": "#/definitions/widget" }
+				}
+			}
+		},
+		"user": {
+			"title": "User",
+			"description": "Defines an user in an interaction space.",
+			"$comment": "user",
+			"properties": {
+				"name": {
+					"title": "Name",
+					"description": "The name of the user.",
+					"type": "string"
+				}
+			}
+		}
+	}
+}

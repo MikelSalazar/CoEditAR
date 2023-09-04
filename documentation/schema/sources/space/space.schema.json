@@ -1,0 +1,26 @@
+{
+	"$id": "https://coeditar.com/schema/files/space/space.schema.json",
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"title": "Space",
+	"description": "Defines an interaction space.",
+	"$comment": "space",
+	"properties": {
+		"name": { 
+			"title": "Name",
+			"description": "The name of the space.",
+			"type": "string"
+		},
+		"spaces": {
+			"title": "Sub-spaces",
+			"description": "The sub-spaces of the space.",
+			"type": "array",
+			"items": { "$ref": "space.schema.json" }
+		},
+		"entities": {
+			"title": "Entities",
+			"description": "The sub-spaces of the space.",
+			"type": "array",
+			"items": { "$ref": "entity.schema.json" }
+		}
+	}
+}

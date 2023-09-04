@@ -1,0 +1,47 @@
+{
+	"$schema": "../builds/coeditar.schema.json",
+	"CoEditAR": 0.1,
+	"models": [
+		{
+			"name": "model01",
+			"classes": [
+				{
+					"name": "class01",
+					"properties": [
+						{ "name": "property01", "type": "boolean" },
+						{ "name": "property02", "type": "number" },
+						{ "name": "property03", "type": "string" }
+					]
+				}
+			]
+		}
+	],
+	"spaces": [ 
+		{
+			"name": "space01",
+			"spaces": [ { "name": "sub-space01"} ],
+			"entities": [ 
+				{
+					"name": "entity01",
+					"entities": [ { "name": "sub-entity01" }]
+				}
+			]
+		}
+	],
+	"users": [
+		{ 
+			"name": "user01"
+		}
+	],
+	"experiences": [
+		{
+			"name": "experience01",
+			"widgets": [
+				{
+					"name": "widget01",
+					"widgets": [ { "name": "sub-widget01" } ]
+				}
+			]
+		}
+	]
+}
