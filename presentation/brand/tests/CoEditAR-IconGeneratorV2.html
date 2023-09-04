@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CoEditAR Icon Generator V2</title>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+		<style>
+* {font-family: Arial, Helvetica, sans-serif;margin: 0;}
+html,body {width: 100%;height: 100%; display: flex; background: grey; color: black; }
+div {display: inline-block; }
+#controls { background: lightgrey; min-width:300px; overflow-y: auto;}
+h2 { margin-left: 5px; }
+label { margin-left: 10px; width: 100px; height:20px; display: inline-block; }
+.range { width: 120px; height: 20px; background: transparent; position: relative; display: inline-block; }
+.rangeBackground { background: white; position: absolute; top: 5px; width: 120px; height: 10px; border-radius: 5px; }
+.rangeArea { background: darkgrey; position: absolute; top: 5px; left: 10px; width: 100px; height: 10px; }
+.rangeSliderMin { background: darkgrey; left: 0px; width: 10px; height: 20px; position: absolute; border-radius: 10px 0 0 10px; }
+.rangeSliderMax { background: darkgrey; left: 110px; width: 10px; height: 20px; position: absolute; border-radius: 0 10px 10px 0; }
+.rangeThumb { background: black; position: absolute; top: 4px; left: 50px; width: 20px; height: 12px; border-radius: 10px; }
+.rangeCheck { position: absolute; left :130px; width: 20px; height: 20px; background: none; border: none; text-align: center; outline: none;}
+		</style>
+	</head>
+	<body>
+		<div id="controls">
+			<h2>CoEditAR Icon Generator </h2><br>
+			<input id="randomize" type="button" value="Randomize" onclick="randomize(); " />
+			<input id="reset" type="button" value="Reset" onclick="resetData();" />
+			<input id="export" type="button" value="Export to SVG" onclick="exportToSVG();" />
+			<br>
+			<br>
+			<h2>Main: </h2>
+			<label>Size: </label><div id="size" class="range"></div><br>
+			<label>Rotation: </label><div id="rotation" class="range"></div><br>
+			<br>
+			<h2>Background:</h2>
+			<label>Inner Radius: </label><div id="backgroundInnerRadius" class="range"></div><br>
+			<label>Outer Radius: </label><div id="backgroundOuterRadius" class="range"></div><br>
+			<label>Angle: </label><div id="backgroundAngle" class="range"></div><br>
+			<label>Stroke: </label><div id="backgroundStroke" class="range"></div><br>
+			<br>
+			<h2>Users:</h2>
+			<label>Count: </label><div id="userCount" class="range"></div><br>
+			<label>Head Size: </label><div id="headSize" class="range"></div><br>
+			<label>Head Offset: </label><div id="headOffset" class="range"></div><br>
+			<label>Arms Size: </label><div id="armsSize" class="range"></div><br>
+			<label>Arms Length: </label><div id="armsLength" class="range"></div><br>
+			<label>Arms Offset: </label><div id="armsOffset" class="range"></div><br>
+			<br>
+			<h2>Hands:</h2>
+			<label>Size: </label><div id="handsSize" class="range"></div><br>
+			<label>Offset: </label><div id="handsOffset" class="range"></div><br>
+			<label>Outline: </label><div id="handsOutline" class="range"></div><br>
+		</div>
+		<div id="drawing">
+			<svg width="512" height="512">
+				<text x="0" y="20" fill="black">Error: Javascript Required</text>
+			</svg>
+		</div>
+		<script>
+
+
+// ---------------------------------------------------------- RANGE INPUT CLASS
+
+/** Defines a more advanced range input control*/
+class RangeInput {
+
+	/** The list of RangeInput instances. */
+	static instances = [];
+
+	/** The selected value. */
+	get value() {
+		return (this.thumb.offsetLeft / 100.0 * 
+			(this._max - this._min)) + this._min;
+	}
+	set value(value) {
+		this.thumb.style.left = (((value - this._min) /
+			(this._max - this._min)) * 100.0) + "px";
+		this.checkValue()
+	}
+
+	/** The minimum value. */
+	get min() { return this._min; }
+	set min(value) { this._min = value; }
+
+	/** The maximum value. */
+	get max() { return this._max; }
+	set max(value) { this._max = value; }
+
+	/** The minimum random value. */
+	get randomMin() { 
+		return (this.sliderMin.offsetLeft / 100.0 * 
+			(this._max - this._min)) + this._min;
+	}
+	set randomMin(value) {
+		this.sliderMin.style.left = (((value - this._min)
+			/ (this._max - this._min)) * 100.0) + "px"
+	}
+
+	/** The maximum random value. */
+	get randomMax() { 
+		return (this.sliderMax.offsetLeft / 100.0 * 
+			(this._max - this._min)) + this._min;
+	}
+	set randomMax(value) {
+		this.sliderMax.style.left = (((value - this._min)
+			/ (this._max - this._min)) * 100.0) + 10 + "px";
+	}
+
+	/** The maximum value. */
+	get random() { return this._random; }
+	set random(value) { 
+		this.sliderMin.style.visibility = this.sliderMax.style.visibility =
+			this.area.style.visibility = (value)? "visible" : "hidden";
+		this.check.innerHTML = (value)? "&#127922;" : "&#128274;";
+		this._random = value;
+		this.value = this.value;
+	}
+
+
+	/** Initializes a new RangeInput instance.
+	 * @param elementId The ID of the element.
+	 * @param value The selected value.
+	 * @param min The minimum value.
+	 * @param max The maximum value.
+	 * @param random Whether to randomize the value or not.
+	 * @param randomMin The minimum random value.
+	 * @param randomMax The maximum random value. */
+	constructor(elementId, value = 0.5, min = 0, max = 1,
+		random = false, randomMin = min, randomMax = max, ) {
+
+		// Get the element
+		this.element = document.getElementById(elementId);
+		if (!this.element) throw Error("Invalid element id: " + elementId);
+
+		// Create the child elements
+		this.background = create("div", false, this.element, {}, "rangeBackground");
+		this.area = create("div", false, this.element, {}, "rangeArea");
+		this.sliderMin = create("div", false, this.element, {}, "rangeSliderMin");
+		this.sliderMax = create("div", false, this.element, {}, "rangeSliderMax");
+		this.thumb = create("div", false, this.element, {}, "rangeThumb");
+		this.check = create("button", false, this.element, {type:"button"}, "rangeCheck");
+
+		// Set the values
+		this._min = min; this._max = max; 
+		this.value = this.initialValue = value;
+		this.random = random; this.randomMin = randomMin;
+		this.randomMax = randomMax;
+
+		// Set the area
+		this.area.style.left = this.sliderMin.offsetLeft + 10 + "px";
+		this.area.style.width = this.sliderMax.offsetLeft -
+			(this.sliderMin.offsetLeft + 10) + "px";
+
+		// Handle the events
+		this.selected = null;
+		this.element.onpointermove = this.handleMovementEvent.bind(this);
+		this.element.onpointerup = (e) => { this.selected = null; };
+		this.sliderMin.onpointerdown = (e) => { this.selected = e.target; };
+		this.sliderMax.onpointerdown = (e) => { this.selected = e.target; };
+		this.thumb.onpointerdown = (e) => { this.selected = e.target; };
+		this.check.onclick = (e) => { this.random = !this.random; };
+		this.area.onpointerup = (e) => {
+			this.thumb.style.left = e.offsetX + "px";
+		};
+
+		// Add this instance to the array
+		RangeInput.instances.push(this);
+	}
+
+
+	/** Handles a movement event.
+	 * @param event The event data. */
+	handleMovementEvent(event) {
+
+		// If no buttons are pressed, do nothing
+		if (event.buttons == 0) { this.selected = null; return; }
+
+		// If no buttons are pressed, do nothing
+		if (this.selected) {
+			let x = this.selected.offsetLeft + event.movementX;
+			switch (this.selected) {
+				case this.sliderMin:
+					if (x < 0) x = 0; else if (x > 100) x = 100;
+					break;
+				case this.sliderMax:
+					if (x < 10) x = 10;
+					else if (x > 110) x = 110;
+					break;
+			}
+
+			// Move the other sliders
+			if (this.sliderMin.offsetLeft > this.sliderMax.offsetLeft - 10) {
+				if (this.selected == this.sliderMin)
+					this.sliderMax.style.left = (x + 10) + "px";
+				else this.sliderMin.style.left = (x - 10) + "px";
+			}
+
+			// Set the position of the slider
+			this.selected.style.left = (x) + "px";
+
+			// Update the area
+			this.area.style.left = this.sliderMin.offsetLeft + 10 + "px";
+			this.area.style.width = this.sliderMax.offsetLeft -
+				(this.sliderMin.offsetLeft + 10) + "px";
+		}
+
+		// Check the value
+		this.checkValue();
+
+		// Draw the image
+		draw();
+
+		// Prevent the default behaviour
+		event.preventDefault();
+	}
+
+
+	/** Randomizes the value of the input within the appropriate range. */
+	randomize() {
+		if (!this.random) return;
+		this.value = (Math.random() * (this.randomMax - this.randomMin)) + 
+			this.randomMin;
+	}
+
+
+	/** Ensures that the thumb is inside the valid area. */
+	checkValue() {
+		let value = this.thumb.offsetLeft;
+		if (this.random) {
+			if (value < this.sliderMin.offsetLeft)
+				value = this.sliderMin.offsetLeft;
+			else if (value > this.sliderMax.offsetLeft - 10)
+				value = this.sliderMax.offsetLeft - 10;
+		} else {
+			if (value < 0) value = 0;
+			if (value > 100) value = 100;
+		}
+		this.thumb.style.left = value + "px";
+
+		// Shows a message on console
+		console.log(this.element.id + ": " + this.value);
+	}
+}
+
+// ----------------------------------------------------------- GLOBAL VARIABLES
+
+let serializing = false; let description;
+let drawing = document.getElementById("drawing");
+let size = new RangeInput("size", 512, 0, 1024);
+let rotation = new RangeInput("rotation", 90, -180, 180, false,-90, 90);
+let backgroundInnerRadius = new RangeInput("backgroundInnerRadius", 0.4, 0, 1);
+let backgroundOuterRadius = new RangeInput("backgroundOuterRadius",1, 0, 1);
+let backgroundAngle = new RangeInput("backgroundAngle", 150, 0, 180, true, 30);
+let backgroundStroke = new RangeInput("backgroundStroke", 0.05);
+let userCount = new RangeInput("userCount", 5.1, 1, 10);
+let headSize = new RangeInput("headSize", 0.5, 0, 1);
+let headOffset = new RangeInput("headOffset", -0.3, -1, 1);
+let armsSize = new RangeInput("armsSize", 0.3, 0, 1);
+let armsLength = new RangeInput("armsLength", 0.95, 0, 1);
+let armsOffset = new RangeInput("armsOffset", 0.4, -1, 1);
+let handsSize = new RangeInput("handsSize", 0.45, 0, 1);
+let handsOffset = new RangeInput("handsOffset", 0, -1, 1);
+let handsOutline = new RangeInput("handsOutline", 0.6, 0, 1);
+
+
+// ----------------------------------------------------------- GLOBAL FUNCTIONS
+
+/** Creates an HTML element.
+ * @param tag The element tag.*/
+function create(tag, svg, parent, fields = {}, className, text) {
+
+	let element = !(svg) ? document.createElement(tag) :
+		document.createElementNS("http://www.w3.org/2000/svg", tag);
+	for (let key in fields) {
+		let attrib = document.createAttribute(key.replace(/\_/g, '-'));
+		attrib.value = fields[key];
+		element.setAttributeNode(attrib);
+	}
+	parent.append(element);
+	if (className) element.className = className;
+	if (text) element.innerText = text;
+	return element;
+}
+
+
+/** Creates a SVG arc using simpler parameters.
+ * @param cx The X component of the circle.
+ * @param cy The Y component of the circle.
+ * @param r1 The inner radius of the arc.
+ * @param r2 The outer radius of the arc.
+ * @param a1 The initial angle.
+ * @param a2 The final angle.*/
+function arc (cx, cy, r1, r2, a1, a2) {
+	let d1 = a1 * Math.PI/180, d2 = a2 * Math.PI/180, s1 = Math.sin(d1), 
+		c1 = Math.cos(d1), s2 = Math.sin(d2), c2 = Math.cos(d2), a = a1-a2,
+		o = ((a2-a1) > 180)? 1 : 0;
+	let p =[
+		{x: (cx + s1 * r1).toFixed(2), y : (cy + c1 * r1).toFixed(2)},
+		{x: (cx + s2 * r1).toFixed(2), y : (cy + c2 * r1).toFixed(2)},
+		{x: (cx + s2 * r2).toFixed(2), y : (cy + c2 * r2).toFixed(2)},
+		{x: (cx + s1 * r2).toFixed(2), y : (cy + c1 * r2).toFixed(2)},
+	];
+	return "M " + p[0].x + " " + p[0].y  + " A " + r1.toFixed(2) + " " 
+		+ r1.toFixed(2) + " " + a + " " + o + " 0 " + p[1].x + " " + p[1].y
+		+ " L " + p[2].x + " " + p[2].y + " A " + r2.toFixed(2) + " "
+		+ r2.toFixed(2) + " " + a + " " + o + " 1 " + p[3].x + " " + p[3].y
+		+ " L " + p[0].x + " " + p[0].y
+};
+
+
+/** Draws the icon. */
+function draw() {
+
+	// Clean the drawing element
+	drawing.children[0].remove();
+
+	// Create variables 
+	let s = Math.floor(size.value), s2 = s / 2, s4 = s / 4, r = rotation.value;
+	let r1 = backgroundInnerRadius.value * s2, 
+		r2 = backgroundOuterRadius.value * s2, rd = r2 - r1, rc = (r1 + r2)/2;
+	let halfAngle = backgroundAngle.value, totalAngle = halfAngle * 2;
+
+	// Create the different SVG elements
+	let svg = create("svg", true, drawing, { width: s, height: s , 
+		xmlns: "http://www.w3.org/2000/svg"});
+	create("title", false, svg, {}, null, "CoEditAR Icon");
+	description = create("desc", false, svg, {}, null, serialize());
+	let group = create("g", true, svg, { id: "icon",
+		transform: "translate(" + s2.toFixed(2) + " " + s2.toFixed(2) + 
+		") rotate(" + r.toFixed(2) + ")" });
+	
+	// Create the background
+	create("path", true, group, {id: "background",
+		d: arc(0, 0, r1, r2 , -halfAngle, halfAngle),
+		fill: "black", stroke: "none"});
+
+	// Utility function
+	let degToRads = Math.PI/180;
+	function sin(angle) { return Math.sin(angle * degToRads); }
+	function cos(angle) { return Math.cos(angle * degToRads); }
+
+	// Create the users
+	let userIndex, uc = Math.round(userCount.value),
+		slice = totalAngle / uc, center = rc,
+		hp = center + (rd/2 * headOffset.value),
+		hs = rd/2 * headSize.value,
+		ar = armsSize.value * rd, ao = rc + (rd * armsOffset.value /2),
+		ar1 = ao - (ar/ 2), ar2 = ao + (ar/ 2),
+		as = slice/2 * armsLength.value,
+		hss = as * 2 * handsSize.value, hsf = ao + (ar * handsOffset.value),
+		hso = as * 2 * handsOutline.value;
+
+	// The initial hands
+	create("circle", true, group, {id: "userHandOutline0",
+	 	cx: hsf * sin(halfAngle), cy: hsf * cos(halfAngle), 
+		r:hso, fill: "black", stroke: "none"});
+	create("circle", true, group, {id: "userHand0",
+		 	cx: hsf * sin(halfAngle), cy: hsf * cos(halfAngle), 
+			r:hss, fill: "white", stroke: "none"});
+	create("circle", true, group, {id: "userHandOutline" + uc,
+	 	cx: hsf * sin(-halfAngle), cy: hsf * cos(-halfAngle), 
+		r:hso, fill: "black", stroke: "none"});
+	create("circle", true, group, {id: "userHand" + uc,
+		 	cx: hsf * sin(-halfAngle), cy: hsf * cos(-halfAngle), 
+			r:hss, fill: "white", stroke: "none"});
+
+	// The users themselves
+	for (userIndex = 0; userIndex < uc; userIndex++) {
+		let angle = (((userIndex + 0.5) * slice) - halfAngle) ;
+		create("circle", true, group, {id: "userHead" + (userIndex + 1),
+		 	cx: hp * sin(angle), cy: hp * cos(angle), 
+			r:hs, fill: "white", stroke: "none"});
+		create("path", true, group, {id: "userArms" + (userIndex + 1),
+			d: arc(0, 0, ar1, ar2, angle - as, angle + as),
+			fill: "white", stroke: "none"});
+
+		if (userIndex == uc-1) continue;
+		create("circle", true, group, {id: "userHandOutline" + (userIndex + 1),
+		 	cx: hsf * sin(angle + slice/2), cy: hsf * cos(angle + slice/2), 
+			r:hso, fill: "black", stroke: "none"});
+		create("circle", true, group, {id: "userHand" + (userIndex + 1),
+		 	cx: hsf * sin(angle + slice/2), cy: hsf * cos(angle + slice/2), 
+			r:hss, fill: "white", stroke: "none"});
+	}
+
+
+	// Serialize the data
+	serialize();
+}
+
+
+/** Serializes the icon data. */
+function serialize() {
+	let data = [];
+	for (const r of RangeInput.instances) {
+		let string = "" + r.value;
+		for (let c = 3; c < string.length; c++) // Remove repeated characters
+			if(string[c] == string[c-1] && string[c-1] == string[c-2]) 
+				string = string.substr(0, c-1);
+		data.push(string);
+	}
+	try { serializing = true; location.hash = data.join(); }
+	catch (e) {}
+	return data.join();
+}
+
+
+/** Deserializes the icon data. */
+function deserialize() {
+	if (serializing) { serializing = false; return; }
+	console.log("deserialize");
+	let data = location.hash.substring(1).split(',');
+	for (let c = 0; c < data.length; c++){
+		if (c >= RangeInput.instances.length) break;
+		// RangeInput.instances[c].random = false;
+		RangeInput.instances[c].value = parseFloat(data[c]);
+	}
+	draw();
+}
+
+
+/** Randomizes all the values. */
+function randomize() {
+	for (const range of RangeInput.instances) range.randomize();
+	draw();
+}
+
+/** Randomizes all the values. */
+function resetData() {
+	for (const range of RangeInput.instances) range.value = range.initialValue;
+	draw();
+}
+
+
+/** Exports the drawing to a SVG file. */
+function exportToSVG() {
+
+	// Prettify the XML code
+	let xmlCode = drawing.innerHTML;
+	let xmlDoc = new DOMParser().parseFromString(xmlCode, 'application/xml');
+	let xsltDoc = new DOMParser().parseFromString([
+		'<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
+		'  <xsl:strip-space elements="*"/>',
+		'  <xsl:template match="para[content-style][not(text())]">',
+		'    <xsl:value-of select="normalize-space(.)"/>',
+		'  </xsl:template>',
+		'  <xsl:template match="node()|@*">',
+		'    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
+		'  </xsl:template>',
+		'  <xsl:output indent="yes"/>',
+		'</xsl:stylesheet>',
+	].join('\n'), 'application/xml');
+	let xsltProcessor = new XSLTProcessor();
+	xsltProcessor.importStylesheet(xsltDoc);
+	let resultDoc = xsltProcessor.transformToDocument(xmlDoc);
+	let data = new XMLSerializer().serializeToString(resultDoc);
+
+	// Create a false link to download the data
+	let blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+	let url = window.URL.createObjectURL(blob);
+	let link = document.createElement("a");
+	document.body.appendChild(link);
+	link.style = "display: none";
+	link.href = url;
+	link.download = "icon.svg";
+	link.click();
+	setTimeout(function () {
+		document.body.removeChild(link);
+		window.URL.revokeObjectURL(url);
+	}, 0);
+}
+
+
+// ---------------------------------------------------------- ENTRY POINT
+
+
+// Allow the user to input custom data through the URL
+window.onhashchange = deserialize;
+
+// Update for the first time
+deserialize(); draw();
+		</script>
+	</body>
+</html>
